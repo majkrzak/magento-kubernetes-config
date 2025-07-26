@@ -1,0 +1,15 @@
+{
+    "name": "majkrzak/kubernetes-config",
+    "description": "Read Magento configuration from Kubernetes API",
+    "require": {
+    },
+    "type": "magento2-module",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Majkrzak\\KubernetesConfig": ""
+        }
+    }
+}
