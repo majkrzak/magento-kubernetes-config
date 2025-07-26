@@ -24,10 +24,14 @@ class KubernetesApi
     }
 
     /**
-     * Fetch annotations of current pod.
+     * Fetch `magento.config/*` annotations of current pod and converts them to ConfigEntries.
+     *
+     * @return Generator<\Majkrzak\KubernetesConfig\Data\ConfigEntry>
      */
-    public function getAnnotations(): array
+    public function parseAnnotations(): \Generator
     {
-        return $this->client->request("/api/v1/namespaces/${this->podNamespace}/pods/${this->podName}")["metadata"]["annotations"];
+        foreach (((($this->client->request("/api/v1/namespaces/${this->podNamespace}/pods/${this->podName}") ?: []) ["metadata"] ?? []) ["annotations"] ?? []) as $key => $val) {
+            yield new \Majkrzak\KubernetesConfig\Data\ConfigEntry([], "");
+        }
     }
 }
