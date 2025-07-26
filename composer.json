@@ -2,6 +2,8 @@
     "name": "majkrzak/kubernetes-config",
     "description": "Read Magento configuration from Kubernetes API",
     "require": {
+        "magento/framework": "*",
+        "travisghansen/kubernetes-client-php": "*"
     },
     "type": "magento2-module",
     "autoload": {
@@ -9,7 +11,13 @@
             "registration.php"
         ],
         "psr-4": {
-            "Majkrzak\\KubernetesConfig": ""
+            "Majkrzak\\KubernetesConfig\\": ""
+        }
+    },
+    "repositories": {
+        "0": {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
         }
     }
 }
