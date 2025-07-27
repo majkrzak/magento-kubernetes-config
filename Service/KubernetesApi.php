@@ -51,10 +51,7 @@ class KubernetesApi
 
         foreach (((($this->client->request("/api/v1/namespaces/{$this->podNamespace}/pods/{$this->podName}") ?: []) ["metadata"] ?? []) ["annotations"] ?? []) as $key => $val) {
             if (\str_starts_with($key, self::ANNOTATION_PREFIX)) {
-                yield new ConfigEntry(
-                    \explode(".", \substr($key, \strlen(self::ANNOTATION_PREFIX))),
-                    $val
-                );
+                yield ConfigEntry::from($key, $val);
             }
         }
     }

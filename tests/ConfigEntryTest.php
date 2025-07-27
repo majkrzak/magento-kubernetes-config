@@ -39,4 +39,20 @@ final class ConfigEntryTest extends TestCase
         new ConfigEntry(["foo","bar"], "new") -> applyTo($config);
         $this->assertEquals(["foo" => ["bar" => "new"]], $config);
     }
+
+    public function testParsesPlain(): void
+    {
+        $this->assertEquals(
+            new ConfigEntry(["foo","bar"], "val"),
+            ConfigEntry::from("foo.bar", "val")
+        );
+    }
+
+    public function testParsesAnnotation(): void
+    {
+        $this->assertEquals(
+            new ConfigEntry(["foo","bar"], "val"),
+            ConfigEntry::from("example.com/foo.bar", "val")
+        );
+    }
 }
