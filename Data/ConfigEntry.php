@@ -13,7 +13,7 @@ class ConfigEntry
     /**
      * Apply this entry to given array
      */
-    public function apply(array &$ptr): void
+    public function applyTo(array &$ptr): void
     {
         foreach ($this->path as $key) {
             if (!\array_key_exists($key, $ptr)) {

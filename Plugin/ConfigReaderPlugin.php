@@ -23,7 +23,7 @@ class ConfigReaderPlugin
         }
 
         foreach ($this->kubernetesApi->parseAnnotations() as $annotation) {
-            $annotation->apply($result);
+            $annotation->applyTo($result);
         }
 
         return $result;
