@@ -2,25 +2,31 @@
 
 namespace Majkrzak\KubernetesConfig\Service;
 
+use KubernetesClient\Client;
+use KubernetesClient\Config;
+use Majkrzak\KubernetesConfig\Data\ConfigEntry;
+
 class KubernetesApi
 {
-    private readonly ?\KubernetesClient\Client $client;
+    private readonly ?Client $client;
     private readonly ?string $podNamespace;
     private readonly ?string $podName;
 
     private const ANNOTATION_PREFIX = "magento.config/";
+    private const NAMESPACE_FILE = "/var/run/secrets/kubernetes.io/serviceaccount/namespace";
 
     public function __construct()
     {
         try {
-            $this->client = new \KubernetesClient\Client(
-                \KubernetesClient\Config::LoadFromDefault()
+            $this->client = new Client(
+                Config::LoadFromDefault()
             );
         } catch (\Error $e) {
+            $this->client = null;
         }
 
         $this->podNamespace = \getenv("POD_NAMESPACE") ?:
-            \file_get_contents("/var/run/secrets/kubernetes.io/serviceaccount/namespace") ?: null;
+            (\file_exists(self::NAMESPACE_FILE) ? \file_get_contents(self::NAMESPACE_FILE) : null);
 
         $this->podName = \getenv("POD_NAME") ?:
             \gethostname() ?: null;
@@ -39,9 +45,13 @@ class KubernetesApi
      */
     public function parseAnnotations(): \Generator
     {
-        foreach (((($this->client->request("/api/v1/namespaces/${this->podNamespace}/pods/${this->podName}") ?: []) ["metadata"] ?? []) ["annotations"] ?? []) as $key => $val) {
+        if (!$this->isActive()) {
+            return;
+        }
+
+        foreach (((($this->client->request("/api/v1/namespaces/{$this->podNamespace}/pods/{$this->podName}") ?: []) ["metadata"] ?? []) ["annotations"] ?? []) as $key => $val) {
             if (\str_starts_with($key, self::ANNOTATION_PREFIX)) {
-                yield new \Majkrzak\KubernetesConfig\Data\ConfigEntry(
+                yield new ConfigEntry(
                     \explode(".", \substr($key, \strlen(self::ANNOTATION_PREFIX))),
                     $val
                 );

@@ -3,4 +3,11 @@
     <type name="Magento\Framework\App\DeploymentConfig\Reader">
         <plugin name="majkrzak_kubernetesconfig_configreaderplugin" type="Majkrzak\KubernetesConfig\Plugin\ConfigReaderPlugin" />
     </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="majkrzak_kubernetesconfig_debug" xsi:type="object">Majkrzak\KubernetesConfig\Console\Command\Debug</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
