@@ -4,10 +4,6 @@ namespace Majkrzak\KubernetesConfig\Data;
 
 class ConfigEntry
 {
-    /**
-     * @param array<int,string> $path
-     * @param string $value
-     */
     public function __construct(
         public readonly array $path,
         public readonly string $value,
@@ -16,8 +12,6 @@ class ConfigEntry
 
     /**
      * Apply this entry to given array
-     *
-     * @param array $ptr
      */
     public function apply(array &$ptr): void
     {
