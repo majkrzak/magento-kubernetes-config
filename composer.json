@@ -1,5 +1,5 @@
 {
-    "name": "majkrzak/kubernetes-config",
+    "name": "majkrzak/magento-kubernetes-config",
     "description": "Read Magento configuration from Kubernetes API",
     "require": {
         "magento/framework": "*",
